@@ -1,28 +1,20 @@
-# Purple Color Demo
+# Purple Body Color App
 
-یک برنامه کوچک FastAPI که صفحه اصلی آن از `app.css` استفاده می‌کند. مقدار ویژگی CSS به نام `color` در این فایل برابر `purple` است.
+A small FastAPI application that serves a page using the root-level `app.css` stylesheet.
 
-## اجرا
-
-نقطه ورود ASGI برنامه:
-
-```text
-app.main:app
-```
-
-برای اجرای محلی با یک سرور ASGI مانند Uvicorn:
+## Run
 
 ```text
 uvicorn app.main:app
 ```
 
-مسیرهای موجود:
+The application provides:
 
-- `GET /` صفحه اصلی
-- `GET /app.css` فایل stylesheet
-- `GET /health` پاسخ سلامت JSON
+- `GET /` — HTML page referencing `/app.css`
+- `GET /app.css` — stylesheet containing only `body { color: purple; }`
+- `GET /health` — JSON health response
 
-## تست
+## Test
 
 ```text
 pytest
