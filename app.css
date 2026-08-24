@@ -1,12 +1,1 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: purple;
-  background-color: #fafafa;
-}
-
-main {
-  max-width: 42rem;
-  margin: 4rem auto;
-  padding: 0 1.5rem;
-}
+body { color: purple; }
