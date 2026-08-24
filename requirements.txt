@@ -1,5 +1,4 @@
 fastapi
 pydantic
-httpx
 pytest
-anyio
+httpx
