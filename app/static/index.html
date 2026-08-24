@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>پاک‌سازی ایمن ریپو</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="card">
+    <header>
+      <span class="badge">حالت ایمن · فقط پیش‌نمایش</span>
+      <h1>دامنه پاک‌سازی ریپو</h1>
+      <p>پیش از هر عملیات مخرب، مشخص کنید کدام بخش‌ها مشمول حذف باشند. این ابزار در حال حاضر هیچ فایلی را حذف نمی‌کند.</p>
+    </header>
+
+    <form id="cleanup-form">
+      <fieldset>
+        <legend>موارد قابل حذف</legend>
+        <label class="option">
+          <input type="checkbox" name="delete_working_files">
+          <span><strong>فایل‌های کاری</strong><small>کد، مستندات و پوشه‌های معمولی</small></span>
+        </label>
+        <label class="option">
+          <input type="checkbox" name="delete_hidden_files">
+          <span><strong>فایل‌های مخفی و تنظیمات</strong><small>مانند .gitignore، تنظیمات ابزارها و CI/CD</small></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>مواردی که حفظ می‌شوند</legend>
+        <label class="option">
+          <input type="checkbox" name="preserve_git_metadata" checked>
+          <span><strong>متادیتای Git</strong><small>مانند پوشه .git</small></span>
+        </label>
+        <label class="option">
+          <input type="checkbox" name="preserve_app_skeleton" checked>
+          <span><strong>اسکلت اپلیکیشن</strong><small>FastAPI، Pydantic و رابط vanilla</small></span>
+        </label>
+      </fieldset>
+
+      <label class="confirm"><input type="checkbox" name="explicit_confirmation"> دامنه انتخاب‌شده را صریحاً تأیید می‌کنم.</label>
+      <button type="submit">تهیه پیش‌نمایش</button>
+    </form>
+    <section id="result" class="result" aria-live="polite">هنوز دامنه‌ای تأیید نشده است.</section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
