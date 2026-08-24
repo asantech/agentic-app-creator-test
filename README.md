@@ -1,19 +1,26 @@
-# Local CSS Starter
+# پاک‌سازی ایمن ریپو
 
-A small FastAPI application demonstrating a locally served stylesheet.
+این پروژه یک رابط کوچک FastAPI برای **شفاف‌سازی دامنه حذف** است. به‌دلیل مخرب و برگشت‌پذیری محدود عملیات حذف، برنامه عمداً هیچ فایل، پوشه یا متادیتای Git را تغییر نمی‌دهد؛ حتی پس از تأیید فرم، فقط یک پیش‌نمایش قابل بررسی تولید می‌کند.
 
-## Run
+## اجرا
 
 ```text
 uvicorn app.main:app --reload
 ```
 
-Open `http://127.0.0.1:8000/` in a browser. The stylesheet is available at `/static/app.css`, and `/health` returns a JSON status response.
+سپس به `http://127.0.0.1:8000/` بروید. ورودی ASGI برنامه `app.main:app` است.
 
-## Test
+## API
+
+- `GET /health` — پاسخ سلامت JSON
+- `POST /api/preview` — دریافت گزینه‌های دامنه و تولید پیش‌نمایش
+
+فیلد `explicit_confirmation` باید برای ثبت پیش‌نمایش دامنه `true` باشد. پاسخ API همیشه `destructive_action_performed: false` دارد.
+
+## تست
 
 ```text
 pytest
 ```
 
-The project uses only FastAPI, Python standard-library file handling, and vanilla HTML/CSS. No CDN or external asset is required.
+این برنامه فقط از Python، FastAPI، Pydantic و HTML/CSS/JavaScript خام استفاده می‌کند و هیچ تماس شبکه‌ای یا سرویس خارجی ندارد.
