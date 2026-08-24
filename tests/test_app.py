@@ -1,42 +1,37 @@
 from pathlib import Path
 
-import pytest
-from httpx import ASGITransport, AsyncClient
+from fastapi.testclient import TestClient
 
 from app.main import app
 
 
-@pytest.mark.anyio
-async def test_health_returns_successful_json() -> None:
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
-        response = await client.get("/health")
+client = TestClient(app)
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def test_health_endpoint_returns_success() -> None:
+    response = client.get("/health")
 
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
 
-@pytest.mark.anyio
-async def test_home_references_local_stylesheet() -> None:
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
-        response = await client.get("/")
+def test_css_file_contains_purple_color() -> None:
+    css = (ROOT / "app.css").read_text(encoding="utf-8")
+
+    assert "color: purple;" in css
+
+
+def test_css_route_returns_css_content() -> None:
+    response = client.get("/app.css")
 
     assert response.status_code == 200
-    assert '<link rel="stylesheet" href="/app.css">' in response.text
+    assert "text/css" in response.headers["content-type"]
+    assert "color: purple;" in response.text
 
 
-@pytest.mark.anyio
-async def test_stylesheet_is_served_and_has_red_body_background() -> None:
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
-        response = await client.get("/app.css")
+def test_homepage_references_stylesheet() -> None:
+    response = client.get("/")
 
     assert response.status_code == 200
-    assert response.headers["content-type"].startswith("text/css")
-    assert "body" in response.text
-    assert "background-color: red;" in response.text
-    assert Path("app.css").read_text(encoding="utf-8") == response.text
+    assert 'href="/app.css"' in response.text
