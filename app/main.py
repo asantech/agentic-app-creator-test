@@ -1,14 +1,12 @@
 from pathlib import Path
 
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, HTMLResponse
 
+app = FastAPI(title="Purple Body Color App")
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-app = FastAPI(title="Purple Color Demo")
-app.mount("/static", StaticFiles(directory=BASE_DIR), name="static")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+CSS_PATH = PROJECT_ROOT / "app.css"
 
 
 @app.get("/health")
@@ -16,11 +14,25 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.get("/", response_class=FileResponse)
-def index() -> Path:
-    return BASE_DIR / "index.html"
+@app.get("/", response_class=HTMLResponse)
+def index() -> str:
+    return """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purple Body Color</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <main>
+    <h1>Purple body text</h1>
+    <p>The body text color is provided by app.css.</p>
+  </main>
+</body>
+</html>"""
 
 
-@app.get("/app.css", response_class=FileResponse)
+@app.get("/app.css")
 def stylesheet() -> FileResponse:
-    return FileResponse(BASE_DIR / "app.css", media_type="text/css")
+    return FileResponse(CSS_PATH, media_type="text/css")
