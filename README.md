@@ -1,6 +1,6 @@
-# فرم درخواست وام
+# فرم بازخورد
 
-یک صفحه ساده فارسی با FastAPI، HTML، CSS و JavaScript خام.
+یک فرم بازخورد فارسی و راست‌به‌چپ با FastAPI و JavaScript خام.
 
 ## اجرا
 
@@ -8,10 +8,24 @@
 uvicorn app.main:app
 ```
 
-صفحه فرم در مسیر `/` و بررسی سلامت سرویس در مسیر `/health` قرار دارد. ارسال فرم به `POST /api/loan-request` انجام می‌شود.
+صفحه فرم در `/`، بررسی سلامت در `/health` و endpoint ارسال در `POST /api/feedback` قرار دارد.
+
+بدنه درخواست نمونه:
+
+```json
+{
+  "name": "کاربر نمونه",
+  "email": "user@example.com",
+  "message": "تجربه خوبی بود.",
+  "rating": 5
+}
+```
+
+`rating` باید عدد صحیح strict بین ۱ و ۵ باشد؛ مقدار اعشاری، رشته‌ای، بولی یا خارج از این بازه پذیرفته نمی‌شود.
 
 ## تست
 
 ```text
-python -m pytest -q --disable-warnings --maxfail=1
+python -m pytest -q
+python -m compileall -q .
 ```
