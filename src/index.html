@@ -1,73 +1,101 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Form Demo</title>
-    <style>
-      :root {
-        color-scheme: light;
-        font-family: system-ui, sans-serif;
-      }
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>فرم تماس</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Tahoma, Arial, sans-serif;
+      color: #1f2937;
+      background: #f3f4f6;
+    }
 
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        background: #f4f6f8;
-        color: #1f2933;
-      }
+    * { box-sizing: border-box; }
 
-      main {
-        width: min(90%, 32rem);
-        padding: 2rem;
-        background: white;
-        border: 1px solid #d9e2ec;
-        border-radius: 0.75rem;
-        box-shadow: 0 0.5rem 1.5rem rgb(31 41 51 / 10%);
-      }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+    }
 
-      form {
-        display: grid;
-        gap: 0.75rem;
-      }
+    main {
+      width: min(100%, 34rem);
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 0.5rem 2rem rgb(15 23 42 / 12%);
+    }
 
-      label {
-        font-weight: 600;
-      }
+    h1 { margin-top: 0; color: #111827; }
+    p { line-height: 1.8; }
 
-      input,
-      button {
-        box-sizing: border-box;
-        width: 100%;
-        min-height: 2.5rem;
-        padding: 0.5rem 0.75rem;
-        font: inherit;
-        border-radius: 0.4rem;
-      }
+    form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
 
-      input {
-        border: 1px solid #9fb3c8;
-      }
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 700;
+    }
 
-      button {
-        border: 0;
-        background: #1769aa;
-        color: white;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1>Welcome</h1>
-      <p>Use the form below to enter a value.</p>
-      <form aria-label="Example form">
-        <label for="value">Your value</label>
-        <input id="value" name="value" type="text" placeholder="Enter something">
-        <button type="button">Continue</button>
-      </form>
-    </main>
-  </body>
+    input, textarea, button {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      font: inherit;
+      padding: 0.75rem;
+    }
+
+    textarea { min-height: 8rem; resize: vertical; }
+    button { cursor: pointer; color: #ffffff; background: #2563eb; border-color: #2563eb; }
+    button:hover { background: #1d4ed8; }
+    .hint { margin: 0; color: #64748b; font-size: 0.9rem; }
+    .message { min-height: 1.6rem; margin: 0; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>با ما در تماس باشید</h1>
+    <p>برای ارسال پرسش یا پیشنهاد، فرم زیر را تکمیل کنید.</p>
+
+    <form id="contact-form" dir="rtl">
+      <div>
+        <label for="name">نام و نام خانوادگی</label>
+        <input id="name" name="name" type="text" placeholder="نام خود را وارد کنید" required>
+      </div>
+
+      <div>
+        <label for="email">نشانی ایمیل</label>
+        <input id="email" name="email" type="email" placeholder="ایمیل خود را وارد کنید" required>
+      </div>
+
+      <div>
+        <label for="message">پیام شما</label>
+        <textarea id="message" name="message" placeholder="پیام خود را بنویسید" required></textarea>
+        <p class="hint">لطفاً پیام خود را با جزئیات لازم بنویسید.</p>
+      </div>
+
+      <button type="submit">ارسال پیام</button>
+      <p id="form-status" class="message" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      status.textContent = 'پیام شما با موفقیت آماده ارسال شد.';
+      form.reset();
+    });
+  </script>
+</body>
 </html>
