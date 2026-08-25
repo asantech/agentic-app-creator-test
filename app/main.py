@@ -1,15 +1,16 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from pydantic import BaseModel, Field
-
-app = FastAPI(title="درخواست وام")
+from pydantic import BaseModel, Field, conint
 
 
-class LoanRequest(BaseModel):
-    full_name: str = Field(min_length=2, max_length=100)
-    phone: str = Field(min_length=7, max_length=20)
-    amount: int = Field(gt=0, le=10_000_000_000)
-    employment: str = Field(min_length=2, max_length=80)
+app = FastAPI(title="فرم بازخورد")
+
+
+class FeedbackRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    email: str = Field(..., min_length=3, max_length=200)
+    message: str = Field(..., min_length=1, max_length=2000)
+    rating: conint(strict=True, ge=1, le=5)
 
 
 PAGE = """<!doctype html>
@@ -17,134 +18,92 @@ PAGE = """<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>درخواست وام</title>
+  <title>فرم بازخورد</title>
   <style>
-    :root {
-      color-scheme: light;
-      font-family: Tahoma, Arial, sans-serif;
-      color: #172033;
-      background: #f4f7fb;
-    }
+    :root { font-family: Tahoma, Arial, sans-serif; color: #243047; background: #f4f7fb; }
     * { box-sizing: border-box; }
-    body {
-      direction: rtl;
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #f8fbff, #e7eef8);
-    }
-    .page {
-      min-height: 100vh;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      padding: 32px 7vw 32px 10vw;
-    }
-    .form-card {
-      width: min(100%, 500px);
-      margin-left: auto;
-      padding: 32px;
-      border: 1px solid #dbe4f0;
-      border-radius: 18px;
-      background: #fff;
-      box-shadow: 0 16px 45px rgba(35, 67, 110, .12);
-    }
-    h1 { margin: 0 0 26px; font-size: 1.8rem; color: #102a56; }
-    .field { margin-bottom: 18px; }
-    label { display: block; margin-bottom: 7px; font-size: .95rem; font-weight: bold; }
-    input, select {
-      width: 100%;
-      border: 1px solid #cbd7e6;
-      border-radius: 9px;
-      padding: 12px;
-      font: inherit;
-      background: #fbfdff;
-    }
-    input:focus, select:focus { outline: 2px solid #8eb5ed; border-color: #3576c6; }
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 9px;
-      padding: 13px;
-      color: white;
-      background: #1769aa;
-      font: inherit;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover { background: #12588f; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+    .card { width: min(100%, 560px); background: white; border-radius: 14px; padding: 28px; box-shadow: 0 8px 28px #24304718; }
+    h1 { margin-top: 0; font-size: 1.55rem; }
+    .field { margin: 16px 0; }
+    label { display: block; margin-bottom: 7px; font-weight: 600; }
+    input, textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 11px; font: inherit; }
+    textarea { min-height: 110px; resize: vertical; }
+    input:focus, textarea:focus { outline: 2px solid #93c5fd; border-color: #2563eb; }
+    button { width: 100%; border: 0; border-radius: 8px; padding: 12px; color: white; background: #2563eb; font: inherit; cursor: pointer; }
     button:disabled { opacity: .65; cursor: wait; }
-    #status { min-height: 24px; margin: 16px 0 0; font-size: .9rem; }
-    .success { color: #18733b; }
-    .error { color: #b42318; }
-    @media (max-width: 650px) {
-      .page { padding: 20px; }
-      .form-card { padding: 24px; }
-    }
+    .error { min-height: 24px; color: #b91c1c; margin: 12px 0 0; }
+    .success { color: #166534; margin: 12px 0 0; }
   </style>
 </head>
 <body>
-  <main class="page">
-    <section class="form-card" aria-labelledby="form-title">
-      <h1 id="form-title">درخواست وام</h1>
-      <form id="loan-form">
-        <div class="field">
-          <label for="full-name">نام و نام خانوادگی</label>
-          <input id="full-name" name="full_name" type="text" required minlength="2" autocomplete="name">
-        </div>
-        <div class="field">
-          <label for="phone">شماره تماس</label>
-          <input id="phone" name="phone" type="tel" required minlength="7" autocomplete="tel">
-        </div>
-        <div class="field">
-          <label for="amount">مبلغ وام (تومان)</label>
-          <input id="amount" name="amount" type="number" required min="1" step="100000">
-        </div>
-        <div class="field">
-          <label for="employment">وضعیت شغلی</label>
-          <select id="employment" name="employment" required>
-            <option value="">انتخاب کنید</option>
-            <option value="شاغل">شاغل</option>
-            <option value="آزاد">آزاد</option>
-            <option value="بازنشسته">بازنشسته</option>
-            <option value="سایر">سایر</option>
-          </select>
-        </div>
-        <button type="submit">ارسال</button>
-        <p id="status" role="status" aria-live="polite"></p>
-      </form>
-    </section>
+  <main class="card">
+    <h1>ارسال بازخورد</h1>
+    <form id="feedback-form" novalidate>
+      <div class="field">
+        <label for="name">نام</label>
+        <input id="name" name="name" type="text" required maxlength="100">
+      </div>
+      <div class="field">
+        <label for="email">ایمیل</label>
+        <input id="email" name="email" type="email" required maxlength="200">
+      </div>
+      <div class="field">
+        <label for="message">پیام</label>
+        <textarea id="message" name="message" required maxlength="2000"></textarea>
+      </div>
+      <div class="field">
+        <label for="rating">امتیاز (۱ تا ۵)</label>
+        <input id="rating" name="rating" type="number" min="1" max="5" step="1" required inputmode="numeric" aria-describedby="form-error">
+      </div>
+      <button id="submit-button" type="submit">ارسال بازخورد</button>
+      <p id="form-error" class="error" role="alert"></p>
+      <p id="form-success" class="success" role="status"></p>
+    </form>
   </main>
   <script>
-    const form = document.getElementById('loan-form');
-    const status = document.getElementById('status');
+    const form = document.getElementById('feedback-form');
+    const errorBox = document.getElementById('form-error');
+    const successBox = document.getElementById('form-success');
+    const submitButton = document.getElementById('submit-button');
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const data = new FormData(form);
+      errorBox.textContent = '';
+      successBox.textContent = '';
+      const ratingValue = Number(document.getElementById('rating').value);
+      if (!Number.isInteger(ratingValue) || ratingValue < 1 || ratingValue > 5) {
+        errorBox.textContent = 'لطفاً امتیازی صحیح بین ۱ تا ۵ وارد کنید.';
+        return;
+      }
       const payload = {
-        full_name: data.get('full_name'),
-        phone: data.get('phone'),
-        amount: Number(data.get('amount')),
-        employment: data.get('employment')
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        message: document.getElementById('message').value.trim(),
+        rating: ratingValue
       };
-      status.className = '';
-      status.textContent = 'در حال ارسال...';
-      const button = form.querySelector('button');
-      button.disabled = true;
+      if (!payload.name || !payload.email || !payload.message) {
+        errorBox.textContent = 'لطفاً همه فیلدها را تکمیل کنید.';
+        return;
+      }
+      submitButton.disabled = true;
       try {
-        const response = await fetch('/api/loan-request', {
+        const response = await fetch('/api/feedback', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        if (!response.ok) throw new Error('request failed');
-        status.className = 'success';
-        status.textContent = 'درخواست شما با موفقیت ثبت شد.';
+        const result = await response.json();
+        if (!response.ok) {
+          errorBox.textContent = 'اطلاعات واردشده معتبر نیست؛ لطفاً فیلدها را بررسی کنید.';
+          return;
+        }
+        successBox.textContent = result.message;
         form.reset();
       } catch (error) {
-        status.className = 'error';
-        status.textContent = 'ثبت درخواست انجام نشد. دوباره تلاش کنید.';
+        errorBox.textContent = 'ارسال انجام نشد؛ لطفاً دوباره تلاش کنید.';
       } finally {
-        button.disabled = false;
+        submitButton.disabled = false;
       }
     });
   </script>
@@ -153,8 +112,8 @@ PAGE = """<!doctype html>
 
 
 @app.get("/", response_class=HTMLResponse)
-def loan_form() -> HTMLResponse:
-    return HTMLResponse(PAGE)
+def homepage() -> str:
+    return PAGE
 
 
 @app.get("/health")
@@ -162,6 +121,9 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/api/loan-request")
-def submit_loan_request(request: LoanRequest) -> dict[str, str]:
-    return {"status": "accepted", "message": "درخواست وام دریافت شد."}
+@app.post("/api/feedback")
+def submit_feedback(feedback: FeedbackRequest) -> dict[str, object]:
+    return {
+        "message": "بازخورد شما با موفقیت دریافت شد.",
+        "data": feedback.model_dump() if hasattr(feedback, "model_dump") else feedback.dict(),
+    }
