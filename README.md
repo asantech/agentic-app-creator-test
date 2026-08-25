@@ -1,21 +1,15 @@
-# Form Demo
+# فرم فارسی
 
-A small FastAPI application serving an HTML5 page with a visible semantic form.
+این پروژه یک فرم تماس راست‌به‌چپ با FastAPI و HTML/CSS/JavaScript خام ارائه می‌کند. متن‌های قابل‌نمایش داخل فرم در `src/index.html` فارسی هستند و شناسه‌ها، نام فیلدها، انواع ورودی و منطق ارسال فرم حفظ شده‌اند.
 
-## Run
+## اجرا
 
-From the project root:
+با اجرای ASGI server موجود در محیط، نقطه ورود برنامه `app.main:app` است. صفحه اصلی از مسیر `/` و بررسی سلامت از مسیر `/health` در دسترس است.
 
-```text
-uvicorn app.main:app --reload
-```
+## آزمون
 
-Open `http://127.0.0.1:8000/` to view the page. The form is intentionally presentational and does not submit data to a backend endpoint.
-
-## Test
+آزمون‌ها در `tests/test_app.py` قرار دارند و با دستور زیر اجرا می‌شوند:
 
 ```text
 pytest
 ```
-
-The health check is available at `/health` and returns `{"status":"ok"}`.
