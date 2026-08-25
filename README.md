@@ -1,21 +1,21 @@
-# Purple Body Color App
+# Form Demo
 
-A small FastAPI application that serves a page using the root-level `app.css` stylesheet.
+A small FastAPI application serving an HTML5 page with a visible semantic form.
 
 ## Run
 
+From the project root:
+
 ```text
-uvicorn app.main:app
+uvicorn app.main:app --reload
 ```
 
-The application provides:
-
-- `GET /` — HTML page referencing `/app.css`
-- `GET /app.css` — stylesheet containing only `body { color: purple; }`
-- `GET /health` — JSON health response
+Open `http://127.0.0.1:8000/` to view the page. The form is intentionally presentational and does not submit data to a backend endpoint.
 
 ## Test
 
 ```text
 pytest
 ```
+
+The health check is available at `/health` and returns `{"status":"ok"}`.
