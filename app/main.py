@@ -1,10 +1,10 @@
 from pathlib import Path
 
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import HTMLResponse
 
 
-app = FastAPI(title="Form Demo")
+app = FastAPI(title="فرم فارسی")
 BASE_DIR = Path(__file__).resolve().parent.parent
 INDEX_FILE = BASE_DIR / "src" / "index.html"
 
@@ -14,6 +14,6 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.get("/", response_class=FileResponse)
-def index() -> FileResponse:
-    return FileResponse(INDEX_FILE, media_type="text/html")
+@app.get("/", response_class=HTMLResponse)
+def homepage() -> HTMLResponse:
+    return HTMLResponse(INDEX_FILE.read_text(encoding="utf-8"))
