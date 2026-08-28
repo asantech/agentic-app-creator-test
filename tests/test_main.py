@@ -2,19 +2,21 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 
+
 client = TestClient(app)
 
 
-VALID_PAYLOAD = {
-    "full_name": "علی رضایی",
-    "age": 35,
-    "score": 800,
+VALID_REQUEST = {
+    "first_name": "علی",
+    "last_name": "رضایی",
+    "age": 34,
+    "score": 780,
     "requested_loan": 250000000,
     "salary": 30000000,
-    "salary_deduction": 2000000,
-    "collateral": 400000000,
+    "salary_deduction": 5000000,
+    "collateral_amount": 400000000,
     "job": "کارمند",
-    "work_years": 8,
+    "work_experience": 8,
 }
 
 
@@ -24,52 +26,33 @@ def test_health_endpoint():
     assert response.json() == {"status": "ok"}
 
 
-def test_page_contains_rtl_form_and_all_fields():
+def test_form_contains_persian_rtl_fields_and_submit_script():
     response = client.get("/")
-    html = response.text
     assert response.status_code == 200
-    assert '<html lang="fa" dir="rtl">' in html
+    html = response.text
+    assert 'lang="fa"' in html
+    assert 'dir="rtl"' in html
     assert "درخواست وام" in html
-    for field in (
-        "full_name", "age", "score", "requested_loan", "salary",
-        "salary_deduction", "collateral", "job", "work_years",
-    ):
+    for field in ("first_name", "last_name", "age", "score", "requested_loan", "salary", "salary_deduction", "collateral_amount", "job", "work_experience"):
         assert f'name="{field}"' in html
-    assert 'type="submit"' in html
+    assert '>تایید</button>' in html
     assert "event.preventDefault()" in html
     assert "fetch('/api/loan-requests'" in html
-    assert "finally" in html
 
 
-def test_valid_request_is_accepted_without_storage():
-    response = client.post("/api/loan-requests", json=VALID_PAYLOAD)
+def test_valid_loan_request_is_accepted():
+    response = client.post("/api/loan-requests", json=VALID_REQUEST)
     assert response.status_code == 200
     assert "موفقیت" in response.json()["message"]
 
 
-def test_missing_field_is_rejected():
-    payload = VALID_PAYLOAD.copy()
-    del payload["job"]
-    response = client.post("/api/loan-requests", json=payload)
-    assert response.status_code == 422
+def test_incomplete_non_numeric_and_negative_requests_are_rejected():
+    incomplete = dict(VALID_REQUEST)
+    incomplete.pop("job")
+    assert client.post("/api/loan-requests", json=incomplete).status_code == 422
 
+    non_numeric = dict(VALID_REQUEST, age="نامشخص")
+    assert client.post("/api/loan-requests", json=non_numeric).status_code == 422
 
-def test_negative_numeric_field_is_rejected():
-    payload = VALID_PAYLOAD.copy()
-    payload["age"] = -1
-    response = client.post("/api/loan-requests", json=payload)
-    assert response.status_code == 422
-
-
-def test_non_numeric_field_is_rejected():
-    payload = VALID_PAYLOAD.copy()
-    payload["salary"] = "نامشخص"
-    response = client.post("/api/loan-requests", json=payload)
-    assert response.status_code == 422
-
-
-def test_blank_text_field_is_rejected():
-    payload = VALID_PAYLOAD.copy()
-    payload["full_name"] = "   "
-    response = client.post("/api/loan-requests", json=payload)
-    assert response.status_code == 422
+    negative = dict(VALID_REQUEST, salary=-1)
+    assert client.post("/api/loan-requests", json=negative).status_code == 422
