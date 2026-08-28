@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>درخواست وام</title>
+  <title>فرم اطلاعات</title>
   <style>
     :root {
       font-family: Tahoma, Arial, sans-serif;
-      color: #1f2937;
-      background: #f3f4f6;
+      color: #222;
+      background: #f6f7f9;
     }
 
     * {
@@ -22,133 +22,174 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
+      background: #f6f7f9;
     }
 
-    .loan-form-container {
-      width: min(100%, 720px);
-      padding: 32px;
-      background: #ffffff;
-      border-radius: 14px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+    .form-card {
+      width: min(100%, 460px);
+      padding: 28px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
     }
 
     h1 {
-      margin: 0 0 28px;
-      color: #111827;
-      font-size: 1.8rem;
+      margin: 0 0 24px;
+      font-size: 1.35rem;
       text-align: center;
     }
 
-    form {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
     .field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      margin-bottom: 17px;
     }
 
     label {
-      font-size: 0.95rem;
-      font-weight: 700;
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.92rem;
     }
 
     input {
       width: 100%;
-      padding: 11px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
+      height: 42px;
+      padding: 8px 11px;
+      color: #222;
       font: inherit;
+      border: 1px solid #cfd4dc;
+      border-radius: 6px;
+      outline: none;
       direction: rtl;
     }
 
     input:focus {
-      outline: 2px solid #93c5fd;
-      border-color: #2563eb;
+      border-color: #6b8afd;
+      box-shadow: 0 0 0 3px rgba(107, 138, 253, 0.14);
+    }
+
+    .error-message {
+      display: none;
+      margin-top: 5px;
+      color: #e88989;
+      font-size: 0.72rem;
+      line-height: 1.5;
+    }
+
+    .error-message.is-visible {
+      display: block;
+    }
+
+    input.has-error {
+      border-color: #e8aaaa;
     }
 
     button {
-      grid-column: 1 / -1;
-      margin-top: 8px;
-      padding: 12px 20px;
-      border: 0;
-      border-radius: 8px;
-      color: #ffffff;
-      background: #2563eb;
+      width: 100%;
+      height: 43px;
+      margin-top: 5px;
+      color: #fff;
       font: inherit;
-      font-weight: 700;
+      background: #315bdc;
+      border: 0;
+      border-radius: 6px;
       cursor: pointer;
     }
 
     button:hover {
-      background: #1d4ed8;
-    }
-
-    @media (max-width: 600px) {
-      .loan-form-container {
-        padding: 24px 18px;
-      }
-
-      form {
-        grid-template-columns: 1fr;
-      }
+      background: #274dbf;
     }
   </style>
 </head>
 <body>
-  <main class="loan-form-container">
-    <h1>درخواست وام</h1>
-    <form action="#" method="post">
+  <main class="form-card">
+    <h1>فرم اطلاعات</h1>
+    <form id="information-form" novalidate>
       <div class="field">
         <label for="full-name">نام و نام خانوادگی</label>
-        <input id="full-name" name="full_name" type="text" required>
+        <input id="full-name" name="fullName" type="text" required autocomplete="name" aria-describedby="full-name-error">
+        <div id="full-name-error" class="error-message" role="alert">تکمیل ورودی الزامیست</div>
       </div>
 
       <div class="field">
-        <label for="age">سن</label>
-        <input id="age" name="age" type="number" min="0" required>
+        <label for="phone-number">شماره تماس</label>
+        <input id="phone-number" name="phoneNumber" type="text" inputmode="numeric" required autocomplete="tel" aria-describedby="phone-number-error">
+        <div id="phone-number-error" class="error-message" role="alert">تکمیل ورودی الزامیست</div>
       </div>
 
       <div class="field">
-        <label for="score">امتیاز</label>
-        <input id="score" name="score" type="number" min="0" required>
+        <label for="national-code">کد ملی</label>
+        <input id="national-code" name="nationalCode" type="text" inputmode="numeric" required aria-describedby="national-code-error">
+        <div id="national-code-error" class="error-message" role="alert">تکمیل ورودی الزامیست</div>
       </div>
 
-      <div class="field">
-        <label for="requested-loan">میزان وام درخواستی</label>
-        <input id="requested-loan" name="requested_loan" type="number" min="0" required>
-      </div>
-
-      <div class="field">
-        <label for="salary">حقوق</label>
-        <input id="salary" name="salary" type="number" min="0" required>
-      </div>
-
-      <div class="field">
-        <label for="salary-deduction">کسر از حقوق</label>
-        <input id="salary-deduction" name="salary_deduction" type="number" min="0" required>
-      </div>
-
-      <div class="field">
-        <label for="collateral">مقدار وثیقه</label>
-        <input id="collateral" name="collateral" type="number" min="0" required>
-      </div>
-
-      <div class="field">
-        <label for="job">شغل</label>
-        <input id="job" name="job" type="text" required>
-      </div>
-
-      <div class="field">
-        <label for="work-experience">سنوات کاری</label>
-        <input id="work-experience" name="work_experience" type="number" min="0" required>
-      </div>
-
-      <button type="submit">تایید</button>
+      <button type="submit">ثبت اطلاعات</button>
     </form>
   </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var form = document.getElementById('information-form');
+      var fields = Array.prototype.slice.call(form.querySelectorAll('input'));
+      var namePattern = /^[A-Za-z\u0621-\u063A\u0641-\u064A\u067E\u0686\u0698\u06A9\u06AF\u06CC ]*$/;
+      var digitPattern = /^[0-9\u0660-\u0669\u06F0-\u06F9]*$/;
+
+      function errorFor(field) {
+        return document.getElementById(field.getAttribute('aria-describedby'));
+      }
+
+      function hideError(field) {
+        var error = errorFor(field);
+        error.classList.remove('is-visible');
+        field.classList.remove('has-error');
+      }
+
+      function showError(field) {
+        var error = errorFor(field);
+        error.classList.add('is-visible');
+        field.classList.add('has-error');
+      }
+
+      function filterValue(field) {
+        var pattern = field.id === 'full-name' ? namePattern : digitPattern;
+        var characters = Array.from(field.value);
+        field.value = characters.filter(function (character) {
+          return pattern.test(character);
+        }).join('');
+      }
+
+      fields.forEach(function (field) {
+        field.addEventListener('focus', function () {
+          hideError(field);
+        });
+
+        field.addEventListener('input', function () {
+          filterValue(field);
+          if (field.value.trim() !== '') {
+            hideError(field);
+          }
+        });
+      });
+
+      form.addEventListener('submit', function (event) {
+        var isValid = true;
+
+        fields.forEach(function (field) {
+          filterValue(field);
+          if (field.value.trim() === '') {
+            showError(field);
+            isValid = false;
+          } else {
+            hideError(field);
+          }
+        });
+
+        if (!isValid) {
+          event.preventDefault();
+        }
+      });
+    }());
+  </script>
 </body>
 </html>
