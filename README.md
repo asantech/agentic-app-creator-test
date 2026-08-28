@@ -1,31 +1,17 @@
-# فرم بازخورد
+# حذف امن فایل‌های مخزن
 
-یک فرم بازخورد فارسی و راست‌به‌چپ با FastAPI و JavaScript خام.
+این پروژه یک سرویس کوچک FastAPI با رابط فارسی و RTL است. ریشهٔ مخزن فقط از متغیر محیطی `REPOSITORY_ROOT` خوانده می‌شود و مسیر انتخابی کاربر پذیرفته نمی‌شود.
 
 ## اجرا
 
 ```text
-uvicorn app.main:app
+REPOSITORY_ROOT=/path/to/local/repository uvicorn app.main:app
 ```
 
-صفحه فرم در `/`، بررسی سلامت در `/health` و endpoint ارسال در `POST /api/feedback` قرار دارد.
-
-بدنه درخواست نمونه:
+ابتدا `POST /api/preview` را فراخوانی کنید. سپس فقط با شناسهٔ همان پیش‌نمایش و بدنهٔ زیر حذف واقعی انجام می‌شود:
 
 ```json
-{
-  "name": "کاربر نمونه",
-  "email": "user@example.com",
-  "message": "تجربه خوبی بود.",
-  "rating": 5
-}
+{"preview_id":"...","confirm":true}
 ```
 
-`rating` باید عدد صحیح strict بین ۱ و ۵ باشد؛ مقدار اعشاری، رشته‌ای، بولی یا خارج از این بازه پذیرفته نمی‌شود.
-
-## تست
-
-```text
-python -m pytest -q
-python -m compileall -q .
-```
+خود ریشه و `.git` حفظ می‌شوند. هر symlink، مسیر نامعتبر یا تغییر درخت بین دو مرحله باعث توقف بدون mutation می‌شود. تست‌ها با `pytest` اجرا می‌شوند.
