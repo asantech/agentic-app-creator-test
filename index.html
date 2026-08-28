@@ -1,150 +1,143 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contact Form</title>
+  <meta name="description" content="A responsive Bootstrap contact form using a locally installed stylesheet.">
+  <title>Contact us</title>
+
+  <!-- Bootstrap is loaded from the locally installed package; no CDN is used. -->
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+
   <style>
-    /* Local Bootstrap-compatible styles keep the page fully offline. */
-    :root {
-      --bs-primary: #0d6efd;
-      --bs-primary-dark: #0a58ca;
-      --bs-body-color: #212529;
-      --bs-body-bg: #f8f9fa;
-      --bs-border-color: #dee2e6;
-      --bs-danger: #dc3545;
-      --bs-success: #198754;
+    body {
+      min-height: 100vh;
+      background: #f8f9fa;
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      margin: 0;
-      color: var(--bs-body-color);
-      background: var(--bs-body-bg);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.5;
+    .hero {
+      background: linear-gradient(135deg, #0d6efd, #084298);
     }
-    .container { width: 100%; max-width: 960px; margin: 0 auto; padding: 0 1rem; }
-    .min-vh-100 { min-height: 100vh; }
-    .d-flex { display: flex !important; }
-    .align-items-center { align-items: center !important; }
-    .justify-content-center { justify-content: center !important; }
-    .row { display: flex; flex-wrap: wrap; margin: 0 -0.75rem; }
-    .col-md-6 { width: 100%; padding: 0 0.75rem; }
-    .col-12 { width: 100%; padding: 0 0.75rem; }
-    .mb-3 { margin-bottom: 1rem !important; }
-    .mb-4 { margin-bottom: 1.5rem !important; }
-    .mt-3 { margin-top: 1rem !important; }
-    .g-3 { row-gap: 1rem; }
-    .text-center { text-align: center !important; }
-    .text-muted { color: #6c757d !important; }
-    .fw-semibold { font-weight: 600 !important; }
-    .card { background: #fff; border: 1px solid rgba(0,0,0,.125); border-radius: .5rem; }
-    .shadow-sm { box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; }
-    .card-body { padding: 1.5rem; }
-    .form-label { display: inline-block; margin-bottom: .5rem; font-weight: 500; }
-    .form-control, .form-select {
-      display: block;
-      width: 100%;
-      padding: .625rem .75rem;
-      color: var(--bs-body-color);
-      background: #fff;
-      border: 1px solid var(--bs-border-color);
-      border-radius: .375rem;
-      font: inherit;
-      transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+    .contact-card {
+      margin-top: -4rem;
     }
-    .form-control:focus, .form-select:focus {
-      border-color: #86b7fe;
-      outline: 0;
-      box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+
+    .required::after {
+      content: " *";
+      color: #dc3545;
     }
-    textarea.form-control { min-height: 120px; resize: vertical; }
-    .form-check { display: flex; align-items: flex-start; gap: .5rem; min-height: 1.5rem; }
-    .form-check-input { width: 1em; height: 1em; margin-top: .25em; accent-color: var(--bs-primary); }
-    .form-check-label { user-select: none; }
-    .invalid-feedback { display: none; width: 100%; margin-top: .25rem; color: var(--bs-danger); font-size: .875em; }
-    .was-validated .form-control:invalid, .was-validated .form-select:invalid,
-    .was-validated .form-check-input:invalid,
-    .form-control.is-invalid, .form-select.is-invalid, .form-check-input.is-invalid { border-color: var(--bs-danger); }
-    .was-validated .form-control:invalid ~ .invalid-feedback,
-    .was-validated .form-select:invalid ~ .invalid-feedback,
-    .was-validated .form-check-input:invalid ~ .invalid-feedback,
-    .is-invalid ~ .invalid-feedback { display: block; }
-    .btn { display: inline-block; padding: .625rem 1rem; border: 1px solid transparent; border-radius: .375rem; font: inherit; font-weight: 500; cursor: pointer; transition: background-color .15s, border-color .15s; }
-    .btn-primary { color: #fff; background: var(--bs-primary); border-color: var(--bs-primary); }
-    .btn-primary:hover { background: var(--bs-primary-dark); border-color: var(--bs-primary-dark); }
-    .btn-outline-secondary { color: #6c757d; background: transparent; border-color: #6c757d; }
-    .btn-outline-secondary:hover { color: #fff; background: #6c757d; }
-    .d-grid { display: grid !important; }
-    .gap-2 { gap: .5rem !important; }
-    .alert { padding: .75rem 1rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .375rem; }
-    .alert-success { color: #0f5132; background: #d1e7dd; border-color: #badbcc; }
-    .visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-    @media (min-width: 768px) { .col-md-6 { width: 50%; } .card-body { padding: 2rem; } }
   </style>
 </head>
 <body>
-  <main class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <section class="card shadow-sm" aria-labelledby="form-title">
-      <div class="card-body">
-        <div class="text-center mb-4">
-          <h1 id="form-title">Get in touch</h1>
-          <p class="text-muted">Complete the form and we’ll get back to you soon.</p>
+  <header class="hero text-white">
+    <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Main navigation">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#top">Acme Studio</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation" aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavigation">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#contact">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+          </ul>
         </div>
+      </div>
+    </nav>
 
-        <div id="successMessage" class="alert alert-success" role="status" hidden>
-          Thanks! Your message has been prepared successfully.
+    <div class="container py-5" id="top">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <p class="text-uppercase fw-semibold small mb-2">Let’s work together</p>
+          <h1 class="display-4 fw-bold">Bring your next idea to life.</h1>
+          <p class="lead mb-0">Tell us about your project and our team will get back to you shortly.</p>
         </div>
+        <div class="col-lg-4 text-lg-end">
+          <span class="badge rounded-pill text-bg-light px-3 py-2">Replies within one business day</span>
+        </div>
+      </div>
+    </div>
+  </header>
 
-        <form id="contactForm" novalidate>
-          <div class="row g-3">
-            <div class="col-md-6 mb-3">
-              <label class="form-label" for="name">Name</label>
-              <input class="form-control" type="text" id="name" name="name" autocomplete="name" required>
-              <div class="invalid-feedback">Please enter your name.</div>
-            </div>
+  <main class="container pb-5" id="contact">
+    <div class="row justify-content-center">
+      <div class="col-xl-9">
+        <section class="card border-0 shadow-sm contact-card" aria-labelledby="contact-heading">
+          <div class="card-body p-4 p-md-5">
+            <div class="row g-5">
+              <div class="col-lg-5" id="services">
+                <p class="text-primary fw-semibold mb-2">Start a conversation</p>
+                <h2 class="h3" id="contact-heading">How can we help?</h2>
+                <p class="text-body-secondary">Whether you need a new digital product or support for an existing one, we’re ready to listen.</p>
+                <div class="vstack gap-3 mt-4">
+                  <div class="d-flex gap-3 align-items-start">
+                    <span class="badge text-bg-primary rounded-circle p-2" aria-hidden="true">1</span>
+                    <div><h3 class="h6 mb-1">Share your goals</h3><p class="small text-body-secondary mb-0">Give us a little context about your needs.</p></div>
+                  </div>
+                  <div class="d-flex gap-3 align-items-start">
+                    <span class="badge text-bg-primary rounded-circle p-2" aria-hidden="true">2</span>
+                    <div><h3 class="h6 mb-1">Meet your team</h3><p class="small text-body-secondary mb-0">We’ll suggest the right next steps.</p></div>
+                  </div>
+                </div>
+              </div>
 
-            <div class="col-md-6 mb-3">
-              <label class="form-label" for="email">Email address</label>
-              <input class="form-control" type="email" id="email" name="email" autocomplete="email" required>
-              <div class="invalid-feedback">Please enter a valid email address.</div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label class="form-label" for="topic">Topic</label>
-              <select class="form-select" id="topic" name="topic" required>
-                <option value="" selected disabled>Choose a topic</option>
-                <option value="general">General question</option>
-                <option value="support">Technical support</option>
-                <option value="feedback">Feedback</option>
-              </select>
-              <div class="invalid-feedback">Please choose a topic.</div>
-            </div>
-
-            <div class="col-12 mb-3">
-              <label class="form-label" for="message">Message</label>
-              <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-              <div class="invalid-feedback">Please enter a message.</div>
-            </div>
-
-            <div class="col-12 mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="consent" name="consent" required>
-                <label class="form-check-label" for="consent">I agree to be contacted about this request.</label>
-                <div class="invalid-feedback">Please confirm your consent.</div>
+              <div class="col-lg-7">
+                <div class="alert alert-success d-none" id="successMessage" role="status" aria-live="polite">
+                  Thanks! Your message has been received.
+                </div>
+                <form id="contactForm" novalidate>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label required" for="name">Name</label>
+                      <input class="form-control" type="text" id="name" name="name" autocomplete="name" required>
+                      <div class="invalid-feedback">Please enter your name.</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label required" for="email">Email</label>
+                      <input class="form-control" type="email" id="email" name="email" autocomplete="email" required>
+                      <div class="invalid-feedback">Please enter a valid email address.</div>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label required" for="service">What do you need?</label>
+                      <select class="form-select" id="service" name="service" required>
+                        <option value="" selected disabled>Select a service</option>
+                        <option value="strategy">Product strategy</option>
+                        <option value="design">UX and visual design</option>
+                        <option value="development">Web development</option>
+                        <option value="other">Something else</option>
+                      </select>
+                      <div class="invalid-feedback">Please choose a service.</div>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label required" for="message">Message</label>
+                      <textarea class="form-control" id="message" name="message" rows="5" minlength="10" required></textarea>
+                      <div class="invalid-feedback">Please enter at least 10 characters.</div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="consent" name="consent" required>
+                        <label class="form-check-label" for="consent">I agree to be contacted about this request.</label>
+                        <div class="invalid-feedback">Please confirm your consent.</div>
+                      </div>
+                    </div>
+                    <div class="col-12 d-flex flex-column flex-sm-row align-items-sm-center gap-3 pt-2">
+                      <button class="btn btn-primary px-4" type="submit">Send message</button>
+                      <small class="text-body-secondary">We never share your information.</small>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
-
-          <div class="d-grid gap-2 mt-3">
-            <button class="btn btn-primary" type="submit">Send message</button>
-            <button class="btn btn-outline-secondary" type="reset">Reset form</button>
-          </div>
-        </form>
+        </section>
       </div>
-    </section>
+    </div>
   </main>
+
+  <footer class="container py-4 border-top text-center text-body-secondary">
+    <small>&copy; 2024 Acme Studio. All rights reserved.</small>
+  </footer>
 
   <script>
     (() => {
@@ -154,21 +147,16 @@
       form.addEventListener('submit', (event) => {
         event.preventDefault();
         form.classList.add('was-validated');
-        successMessage.hidden = true;
+        successMessage.classList.add('d-none');
 
         if (!form.checkValidity()) {
           form.querySelector(':invalid').focus();
           return;
         }
 
-        successMessage.hidden = false;
+        successMessage.classList.remove('d-none');
         form.reset();
         form.classList.remove('was-validated');
-      });
-
-      form.addEventListener('reset', () => {
-        form.classList.remove('was-validated');
-        successMessage.hidden = true;
       });
     })();
   </script>

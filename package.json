@@ -1,0 +1,9 @@
+{
+  "name": "local-bootstrap-page",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A standalone page using Bootstrap from a local package installation.",
+  "dependencies": {
+    "bootstrap": "5.3.3"
+  }
+}
