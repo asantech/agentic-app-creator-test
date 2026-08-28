@@ -1,13 +1,16 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>حذف امن فایل‌های مخزن</title><link rel="stylesheet" href="/static/styles.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>حذف امن مخزن</title><link rel="stylesheet" href="/static/style.css"></head>
 <body>
 <main class="card">
-  <h1>حذف امن فایل‌های مخزن</h1>
-  <p>ابتدا پیش‌نمایش بگیرید. ریشهٔ مخزن حفظ می‌شود و <code>.git</code> حذف نخواهد شد.</p>
-  <section class="actions"><button id="preview">پیش‌نمایش</button><button id="confirm" disabled>تأیید و حذف واقعی</button></section>
-  <p id="status" role="status">هنوز پیش‌نمایشی انجام نشده است.</p>
-  <section><h2>موارد قابل حذف</h2><ul id="deletable"></ul></section>
-  <section><h2>موارد مستثنا</h2><ul id="excluded"></ul></section>
-</main><script src="/static/app.js"></script>
-</body></html>
+  <h1>ابزار امن حذف فایل‌های مخزن</h1>
+  <p>این ابزار ابتدا پیش‌نمایش می‌گیرد. ریشهٔ مخزن و موارد مستثنا حذف نمی‌شوند.</p>
+  <div id="root-status">ریشه هنوز بررسی نشده است.</div>
+  <button id="preview">نمایش پیش‌نمایش</button>
+  <section id="preview-result" hidden><h2>پیش‌نمایش</h2><div id="lists"></div>
+    <div class="warning">هشدار: حذف واقعی غیرقابل‌بازگشت است.</div>
+    <label><input id="confirm" type="checkbox"> حذف همهٔ موارد قابل حذف را تأیید می‌کنم.</label>
+    <button id="delete" disabled>حذف واقعی</button>
+  </section>
+  <pre id="result" aria-live="polite"></pre>
+</main><script src="/static/app.js"></script></body></html>
