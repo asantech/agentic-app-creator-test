@@ -1,22 +1,24 @@
 from __future__ import annotations
 
 from typing import Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, StrictBool
 
 
-class ConfirmationRequest(BaseModel):
-    preview_id: str = Field(min_length=1)
-    confirm: bool = False
+class DeleteRequest(BaseModel):
+    confirmation: StrictBool
 
 
 class OperationResponse(BaseModel):
     status: str
-    preview_id: str | None = None
+    root: str | None = None
+    deletable: list[str] = []
     deleted: list[str] = []
     excluded: list[str] = []
-    failures: list[str] = []
-    counts: dict[str, int] = {}
+    failures: list[dict[str, str]] = []
+    counts: dict[str, int | None] = {}
     remaining_unknown: bool = False
-    message: str = ""
+    error: str | None = None
     verification_error: str | None = None
-    details: dict[str, Any] = {}
+
+    def as_dict(self) -> dict[str, Any]:
+        return self.model_dump()
