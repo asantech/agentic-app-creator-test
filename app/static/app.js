@@ -1,19 +1,20 @@
-const previewButton = document.getElementById('preview');
-const confirmButton = document.getElementById('confirm');
-const statusBox = document.getElementById('status');
-let previewId = null;
-function renderList(id, values) { document.getElementById(id).innerHTML = (values || []).map(value => `<li>${escapeHtml(value)}</li>`).join(''); }
-function escapeHtml(value) { return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-previewButton.addEventListener('click', async () => {
-  confirmButton.disabled = true; previewId = null; statusBox.textContent = 'در حال تهیهٔ پیش‌نمایش...';
-  try { const response = await fetch('/api/preview', {method:'POST'}); const data = await response.json();
-    previewId = data.preview_id; renderList('deletable', data.deleted); renderList('excluded', data.excluded);
-    confirmButton.disabled = data.status !== 'preview' || !previewId; statusBox.textContent = data.message;
-  } catch (error) { statusBox.textContent = 'خطا در ارتباط با سرویس.'; }
+const $ = (id) => document.getElementById(id);
+const show = (value) => { $('result').textContent = JSON.stringify(value, null, 2); };
+$('preview').addEventListener('click', async () => {
+  try {
+    const response = await fetch('/api/preview');
+    const data = await response.json();
+    if (!response.ok) throw data;
+    $('root-status').textContent = `ریشه: ${data.root}`;
+    $('lists').textContent = `قابل حذف (${data.deletable.length}):\n${data.deletable.join('\n') || 'موردی نیست'}\n\nمستثنا (${data.excluded.length}):\n${data.excluded.join('\n') || 'موردی نیست'}`;
+    $('preview-result').hidden = false; show(data);
+  } catch (error) { show(error); }
 });
-confirmButton.addEventListener('click', async () => {
-  if (!previewId || !window.confirm('آیا حذف واقعی را تأیید می‌کنید؟')) return;
-  confirmButton.disabled = true; statusBox.textContent = 'در حال حذف...';
-  const response = await fetch('/api/confirm', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({preview_id:previewId,confirm:true})});
-  const data = await response.json(); renderList('deletable', data.deleted); renderList('excluded', data.excluded); statusBox.textContent = data.message; previewId = null;
+$('confirm').addEventListener('change', (event) => { $('delete').disabled = !event.target.checked; });
+$('delete').addEventListener('click', async () => {
+  if (!$('confirm').checked) return;
+  try {
+    const response = await fetch('/api/delete', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({confirmation:true})});
+    const data = await response.json(); if (!response.ok) throw data; show(data);
+  } catch (error) { show(error); }
 });
