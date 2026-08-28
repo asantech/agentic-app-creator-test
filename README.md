@@ -1,19 +1,21 @@
-# Safe Repository Cleaner
+# فرم درخواست وام
 
-A small FastAPI application for safely previewing and, only after explicit confirmation, deleting the contents of a configured sandbox-local repository.
+یک وب‌اپلیکیشن کوچک فارسی و راست‌به‌چپ با FastAPI و Vanilla JavaScript است.
 
-## Run
+## اجرا
 
-Set `SANDBOX_ROOT` to the local directory that contains the target repository, then start the ASGI application with Uvicorn using `app.main:app`.
+ورودی ASGI برنامه `app.main:app` است. برای اجرای محلی با Uvicorn:
 
-Repository paths submitted to the API must be relative to `SANDBOX_ROOT`. Absolute paths, parent traversal, and symlink repository paths are rejected. The repository root and `.git` are preserved.
+```text
+uvicorn app.main:app --reload
+```
 
-- `GET /health` returns a health response.
-- `POST /preview` accepts `{ "repo_path": "repo" }` and performs no mutation.
-- `POST /delete` requires `{ "repo_path": "repo", "confirmation": "DELETE" }`.
+سپس صفحه اصلی را در مسیر `/` و وضعیت سرویس را در `/health` مشاهده کنید.
 
-The delete response reports `deleted`, `excluded`, `failures`, and `remaining` based on the resulting filesystem state.
+## آزمون
 
-## Tests
+```text
+pytest
+```
 
-Run `pytest` from the project directory.
+فرم اطلاعات را با `fetch` به endpoint داخلی `POST /api/loan-requests` ارسال می‌کند و اعتبارسنجی داده‌ها در سمت سرور با Pydantic انجام می‌شود.
