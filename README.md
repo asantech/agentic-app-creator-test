@@ -1,21 +1,9 @@
-# فرم درخواست وام
+# Bootstrap Contact Form
 
-یک فرم ساده فارسی و راست‌به‌چپ برای دریافت اطلاعات درخواست وام است که با FastAPI، Pydantic و HTML/CSS/JavaScript خام ساخته شده است.
+A standalone responsive HTML page styled with Bootstrap 5.3.3.
 
-## اجرا
+## Run locally
 
-ورودی ASGI برنامه `app.main:app` است. برای اجرای محلی:
+Open `index.html` in a browser or serve the project directory with any local static HTTP server. The page uses Bootstrap's CDN stylesheet and does not require package installation.
 
-```text
-uvicorn app.main:app
-```
-
-صفحه فرم در مسیر `/` و وضعیت سرویس در `/health` قرار دارد. ارسال فرم به `POST /api/loan-applications` انجام می‌شود و اطلاعات در پایگاه داده ذخیره نمی‌شود.
-
-## تست
-
-```text
-pytest
-```
-
-فیلدهای عددی باید غیرمنفی باشند و نام و شغل نباید خالی باشند.
+The form intentionally prevents submission and displays a local status message instead of sending data to a backend.
