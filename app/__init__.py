@@ -1,1 +1,0 @@
-"""Loan request application package."""
