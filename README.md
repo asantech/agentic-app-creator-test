@@ -1,40 +1,26 @@
-# فرم درخواست وام
+# فرم نمای کاربری
 
-یک فرم ساده فارسی و راست‌چین با FastAPI برای دریافت اطلاعات درخواست وام.
+این پروژه یک فرم فارسی راست‌به‌چپ با FastAPI و Bootstrap است. Bootstrap فقط به‌صورت stylesheet از CDN در HTML ارجاع داده شده و هیچ وابستگی Python جدیدی لازم نیست.
 
 ## اجرا
-
-از ریشه پروژه اجرا کنید:
 
 ```text
 uvicorn app.main:app --reload
 ```
 
-سپس صفحه را در مسیر `/` باز کنید. بررسی سلامت برنامه در `/health` و endpoint ارسال فرم در مسیر زیر در دسترس است:
+صفحه فرم در `/`، endpoint سلامت در `/health` و endpoint ارسال در `/submit` قرار دارد.
 
-```text
-POST /api/loan-requests
-```
+## قرارداد ارسال
 
-بدنه درخواست باید JSON شامل این فیلدها باشد:
+`POST /submit` با بدنه JSON شامل این ۹ فیلد انجام می‌شود:
 
-- `full_name`
-- `age`
-- `score`
-- `requested_loan`
-- `salary`
-- `salary_deduction`
-- `collateral`
-- `job`
-- `work_years`
+`name`, `email`, `phone`, `company`, `job_title`, `address`, `city`, `postal_code`, `message`
 
-تمام فیلدها الزامی هستند و فیلدهای عددی نباید منفی باشند.
+ارسال فرم در مرورگر با `fetch` انجام می‌شود و نتیجه در alert بوت‌استرپ نمایش داده می‌شود.
 
 ## تست
 
 ```text
-python -m pytest -q
-python -m compileall -q .
+pytest
+python -m compileall app tests
 ```
-
-رابط کاربری با HTML، CSS و JavaScript خام ساخته شده و ارسال فرم بدون بارگذاری مجدد صفحه انجام می‌شود.
