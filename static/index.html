@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>پاک‌سازی امن ریپو</title>
+  <style>
+    body { font-family: sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; background: #f7f7f7; color: #222; }
+    main { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px #ddd; }
+    label, input, button { display: block; width: 100%; box-sizing: border-box; margin-top: .6rem; }
+    input { padding: .65rem; border: 1px solid #aaa; border-radius: 5px; }
+    button { padding: .7rem; cursor: pointer; border: 0; border-radius: 5px; background: #245b9e; color: white; }
+    button.danger { background: #a52828; }
+    .warning { color: #8d1515; font-weight: bold; }
+    pre { white-space: pre-wrap; background: #f0f0f0; padding: 1rem; direction: ltr; text-align: left; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>پاک‌سازی امن ریپو</h1>
+    <p>مسیر باید نسبی و داخل sandbox باشد. ابتدا پیش‌نمایش بگیرید.</p>
+    <label for="repoPath">مسیر ریپو</label>
+    <input id="repoPath" name="repo_path" placeholder="repository-name" autocomplete="off">
+    <button id="previewButton" type="button">Preview / پیش‌نمایش</button>
+    <p class="warning">هشدار: حذف واقعی برگشت‌پذیر نیست و فقط با تأیید صریح انجام می‌شود.</p>
+    <label><input id="confirm" type="checkbox"> با حذف همه موارد قابل حذف موافقم</label>
+    <button id="deleteButton" class="danger" type="button">حذف واقعی</button>
+    <pre id="result" aria-live="polite"></pre>
+  </main>
+  <script>
+    const pathField = document.getElementById('repoPath');
+    const result = document.getElementById('result');
+    async function send(url, payload) {
+      const response = await fetch(url, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)});
+      const data = await response.json();
+      result.textContent = JSON.stringify(data, null, 2);
+    }
+    document.getElementById('previewButton').onclick = () => send('/preview', {repo_path: pathField.value});
+    document.getElementById('deleteButton').onclick = () => {
+      if (!document.getElementById('confirm').checked) { result.textContent = 'برای حذف، تأیید صریح را فعال کنید.'; return; }
+      send('/delete', {repo_path: pathField.value, confirmation: 'DELETE'});
+    };
+  </script>
+</body>
+</html>

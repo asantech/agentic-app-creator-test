@@ -1,19 +1,19 @@
-# وب‌اپ فرم درخواست وام
+# Safe Repository Cleaner
 
-یک فرم فارسی و راست‌چین برای ثبت درخواست وام با FastAPI و vanilla JavaScript.
+A small FastAPI application for safely previewing and, only after explicit confirmation, deleting the contents of a configured sandbox-local repository.
 
-## اجرا
+## Run
 
-```text
-uvicorn app.main:app --reload
-```
+Set `SANDBOX_ROOT` to the local directory that contains the target repository, then start the ASGI application with Uvicorn using `app.main:app`.
 
-سپس صفحه را در مسیر `/` باز کنید. ارسال فرم بدون بارگذاری مجدد صفحه انجام می‌شود و داده‌ها به endpoint داخلی `/api/loan-requests` فرستاده می‌شوند.
+Repository paths submitted to the API must be relative to `SANDBOX_ROOT`. Absolute paths, parent traversal, and symlink repository paths are rejected. The repository root and `.git` are preserved.
 
-## آزمون
+- `GET /health` returns a health response.
+- `POST /preview` accepts `{ "repo_path": "repo" }` and performs no mutation.
+- `POST /delete` requires `{ "repo_path": "repo", "confirmation": "DELETE" }`.
 
-```text
-pytest
-```
+The delete response reports `deleted`, `excluded`, `failures`, and `remaining` based on the resulting filesystem state.
 
-مقادیر عددی باید غیرمنفی باشند و فیلدهای متنی نام و شغل نیز الزامی هستند.
+## Tests
+
+Run `pytest` from the project directory.
