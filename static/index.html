@@ -1,16 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>فرم اطلاعات</title>
+  <title>درخواست وام</title>
   <style>
-    :root {
-      font-family: Tahoma, Arial, sans-serif;
-      color: #222;
-      background: #f6f7f9;
-    }
-
     * {
       box-sizing: border-box;
     }
@@ -22,174 +16,118 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: #f6f7f9;
+      background: #f4f6f8;
+      color: #222;
+      font-family: Tahoma, Arial, sans-serif;
     }
 
-    .form-card {
-      width: min(100%, 460px);
+    form {
+      width: min(100%, 520px);
       padding: 28px;
+      border: 1px solid #d9dee3;
+      border-radius: 10px;
       background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     }
 
     h1 {
       margin: 0 0 24px;
-      font-size: 1.35rem;
       text-align: center;
+      font-size: 1.6rem;
     }
 
     .field {
-      margin-bottom: 17px;
+      margin-bottom: 16px;
     }
 
     label {
       display: block;
-      margin-bottom: 7px;
-      font-size: 0.92rem;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
     }
 
     input {
       width: 100%;
-      height: 42px;
-      padding: 8px 11px;
-      color: #222;
-      font: inherit;
-      border: 1px solid #cfd4dc;
+      padding: 10px 12px;
+      border: 1px solid #bfc7cf;
       border-radius: 6px;
-      outline: none;
-      direction: rtl;
+      font: inherit;
     }
 
     input:focus {
-      border-color: #6b8afd;
-      box-shadow: 0 0 0 3px rgba(107, 138, 253, 0.14);
-    }
-
-    .error-message {
-      display: none;
-      margin-top: 5px;
-      color: #e88989;
-      font-size: 0.72rem;
-      line-height: 1.5;
-    }
-
-    .error-message.is-visible {
-      display: block;
-    }
-
-    input.has-error {
-      border-color: #e8aaaa;
+      outline: 2px solid #8ab4f8;
+      border-color: #4285f4;
     }
 
     button {
       width: 100%;
-      height: 43px;
-      margin-top: 5px;
-      color: #fff;
-      font: inherit;
-      background: #315bdc;
+      margin-top: 8px;
+      padding: 11px 16px;
       border: 0;
       border-radius: 6px;
+      background: #1769aa;
+      color: #fff;
       cursor: pointer;
+      font: inherit;
+      font-weight: 700;
     }
 
     button:hover {
-      background: #274dbf;
+      background: #12558b;
     }
   </style>
 </head>
 <body>
-  <main class="form-card">
-    <h1>فرم اطلاعات</h1>
-    <form id="information-form" novalidate>
-      <div class="field">
-        <label for="full-name">نام و نام خانوادگی</label>
-        <input id="full-name" name="fullName" type="text" required autocomplete="name" aria-describedby="full-name-error">
-        <div id="full-name-error" class="error-message" role="alert">تکمیل ورودی الزامیست</div>
-      </div>
+  <form dir="rtl" aria-labelledby="form-title">
+    <h1 id="form-title">درخواست وام</h1>
 
-      <div class="field">
-        <label for="phone-number">شماره تماس</label>
-        <input id="phone-number" name="phoneNumber" type="text" inputmode="numeric" required autocomplete="tel" aria-describedby="phone-number-error">
-        <div id="phone-number-error" class="error-message" role="alert">تکمیل ورودی الزامیست</div>
-      </div>
+    <div class="field">
+      <label for="full-name">نام و نام خانوادگی</label>
+      <input id="full-name" name="full-name" type="text">
+    </div>
 
-      <div class="field">
-        <label for="national-code">کد ملی</label>
-        <input id="national-code" name="nationalCode" type="text" inputmode="numeric" required aria-describedby="national-code-error">
-        <div id="national-code-error" class="error-message" role="alert">تکمیل ورودی الزامیست</div>
-      </div>
+    <div class="field">
+      <label for="age">سن</label>
+      <input id="age" name="age" type="number">
+    </div>
 
-      <button type="submit">ثبت اطلاعات</button>
-    </form>
-  </main>
+    <div class="field">
+      <label for="score">امتیاز</label>
+      <input id="score" name="score" type="number">
+    </div>
 
-  <script>
-    (function () {
-      'use strict';
+    <div class="field">
+      <label for="requested-loan">میزان وام درخواستی</label>
+      <input id="requested-loan" name="requested-loan" type="number">
+    </div>
 
-      var form = document.getElementById('information-form');
-      var fields = Array.prototype.slice.call(form.querySelectorAll('input'));
-      var namePattern = /^[A-Za-z\u0621-\u063A\u0641-\u064A\u067E\u0686\u0698\u06A9\u06AF\u06CC ]*$/;
-      var digitPattern = /^[0-9\u0660-\u0669\u06F0-\u06F9]*$/;
+    <div class="field">
+      <label for="salary">حقوق</label>
+      <input id="salary" name="salary" type="number">
+    </div>
 
-      function errorFor(field) {
-        return document.getElementById(field.getAttribute('aria-describedby'));
-      }
+    <div class="field">
+      <label for="salary-deduction">کسر از حقوق</label>
+      <input id="salary-deduction" name="salary-deduction" type="number">
+    </div>
 
-      function hideError(field) {
-        var error = errorFor(field);
-        error.classList.remove('is-visible');
-        field.classList.remove('has-error');
-      }
+    <div class="field">
+      <label for="collateral">مقدار وثیقه</label>
+      <input id="collateral" name="collateral" type="number">
+    </div>
 
-      function showError(field) {
-        var error = errorFor(field);
-        error.classList.add('is-visible');
-        field.classList.add('has-error');
-      }
+    <div class="field">
+      <label for="job">شغل</label>
+      <input id="job" name="job" type="text">
+    </div>
 
-      function filterValue(field) {
-        var pattern = field.id === 'full-name' ? namePattern : digitPattern;
-        var characters = Array.from(field.value);
-        field.value = characters.filter(function (character) {
-          return pattern.test(character);
-        }).join('');
-      }
+    <div class="field">
+      <label for="work-experience">سنوات کاری</label>
+      <input id="work-experience" name="work-experience" type="number">
+    </div>
 
-      fields.forEach(function (field) {
-        field.addEventListener('focus', function () {
-          hideError(field);
-        });
-
-        field.addEventListener('input', function () {
-          filterValue(field);
-          if (field.value.trim() !== '') {
-            hideError(field);
-          }
-        });
-      });
-
-      form.addEventListener('submit', function (event) {
-        var isValid = true;
-
-        fields.forEach(function (field) {
-          filterValue(field);
-          if (field.value.trim() === '') {
-            showError(field);
-            isValid = false;
-          } else {
-            hideError(field);
-          }
-        });
-
-        if (!isValid) {
-          event.preventDefault();
-        }
-      });
-    }());
-  </script>
+    <button type="submit">تایید</button>
+  </form>
 </body>
 </html>
