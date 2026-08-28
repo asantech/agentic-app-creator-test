@@ -1,9 +1,7 @@
-# Bootstrap Form
+# Bootstrap-styled form
 
-A standalone HTML contact form styled with Bootstrap 5.3.3.
+This is a standalone, offline-friendly HTML form. Bootstrap-compatible classes such as `form-control`, `form-select`, `form-check`, `btn`, `row`, `col-md-6`, and responsive utility classes are used directly in the markup.
 
-## Run locally
+The page includes client-side validation, a local success message, and a reset action. It does not submit data to a backend or require external dependencies.
 
-Serve the project directory with any local HTTP server and open `index.html`. The page has no backend or build step.
-
-Bootstrap CSS is referenced from the official jsDelivr CDN in `index.html`.
+Open `index.html` in a browser or serve the project directory with any local static HTTP server.
