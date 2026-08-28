@@ -1,6 +1,5 @@
 fastapi
-starlette
-pydantic
-httpx
 uvicorn
+pydantic
 pytest
+httpx

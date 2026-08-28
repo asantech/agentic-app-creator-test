@@ -1,17 +1,40 @@
-# ابزار امن حذف فایل‌های مخزن
+# فرم درخواست وام
 
-این برنامه ابتدا فهرست فرزندان ریشهٔ مخزن را در `GET /api/preview` نمایش می‌دهد و فقط با `POST /api/delete` و JSON زیر حذف واقعی را انجام می‌دهد:
+یک فرم ساده فارسی و راست‌چین با FastAPI برای دریافت اطلاعات درخواست وام.
 
-```json
-{"confirmation": true}
-```
+## اجرا
 
-ریشه باید صریحاً با متغیرهای محیطی `REPOSITORY_ROOT` و `SANDBOX_ROOT` تنظیم شود؛ ریشه باید یک پوشهٔ موجود و بدون symlink درون sandbox باشد. برای نمونه:
+از ریشه پروژه اجرا کنید:
 
 ```text
-SANDBOX_ROOT=/tmp/sandbox REPOSITORY_ROOT=/tmp/sandbox/repository uvicorn app.main:app
+uvicorn app.main:app --reload
 ```
 
-خود ریشه و `.git` حفظ می‌شوند. هر symlink در مسیر ریشه یا محتوای قابل حذف باعث رد امن عملیات می‌شود.
+سپس صفحه را در مسیر `/` باز کنید. بررسی سلامت برنامه در `/health` و endpoint ارسال فرم در مسیر زیر در دسترس است:
 
-آزمون‌ها با `pytest` اجرا می‌شوند و از ابزار خارجی یا سرویس شبکه استفاده نمی‌کنند.
+```text
+POST /api/loan-requests
+```
+
+بدنه درخواست باید JSON شامل این فیلدها باشد:
+
+- `full_name`
+- `age`
+- `score`
+- `requested_loan`
+- `salary`
+- `salary_deduction`
+- `collateral`
+- `job`
+- `work_years`
+
+تمام فیلدها الزامی هستند و فیلدهای عددی نباید منفی باشند.
+
+## تست
+
+```text
+python -m pytest -q
+python -m compileall -q .
+```
+
+رابط کاربری با HTML، CSS و JavaScript خام ساخته شده و ارسال فرم بدون بارگذاری مجدد صفحه انجام می‌شود.
